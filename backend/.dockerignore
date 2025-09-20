@@ -1,0 +1,36 @@
+# Ignore Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore venv
+venv/
+.env
+
+# Ignore git
+.git
+.gitignore
+
+# Ignore build artifacts
+*.db
+*.log
+*.sqlite3
+*.egg-info/
+dist/
+build/
+
+# Ignore node_modules (if frontend in same repo)
+node_modules/
+
+# Ignore large local data
+data/
+datasets/
+notebooks/
+*.mp4
+*.avi
+*.mkv
+*.jpg
+*.png
+*.npy
+*.pkl
+*.h5
