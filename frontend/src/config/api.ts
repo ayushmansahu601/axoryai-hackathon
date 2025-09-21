@@ -3,8 +3,8 @@
 export const API_CONFIG = {
   // Railway deployment backend URL
   BACKEND_URL: import.meta.env.PROD 
-    ? 'http://127.0.0.1:8000'  // Production Railway URL
-    : 'http://127.0.0.1:8000',  // Use Railway URL for development too
+    ? 'https://axory.tech'  // Production Railway URL
+    : 'https://axory.tech',  // Use Railway URL for development too
   
   ENDPOINTS: {
     PROCESS_VIDEO: '/analyze',  // Changed from /process-video to /analyze to match backend

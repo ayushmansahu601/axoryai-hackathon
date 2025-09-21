@@ -10,6 +10,13 @@ import { DetectionResult } from "@/types/deepfake";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import { createClient } from "@supabase/supabase-js";
+
+// Supabase Client
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL!;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY!;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
 const DeepfakeDetection = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<DetectionResult | null>(null);
@@ -17,8 +24,34 @@ const DeepfakeDetection = () => {
   const [hasText, setHasText] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+useEffect(() => {
+  const fetchJwt = async () => {
+    try {
+      const user_id = "user_123"; 
 
+      const response = await fetch(`${API_CONFIG.BACKEND_URL}/generate-jwt`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id }),
+      });
 
+      if (!response.ok) throw new Error("Failed to generate JWT");
+
+      const jwt_data = await response.json();
+
+      setToken(jwt_data.jwt); // ✅ update state
+    } catch (err) {
+      console.error("JWT fetch error:", err);
+      toast({
+        title: "Authentication Failed",
+        description: "Unable to fetch access token.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  fetchJwt();
+}, []);
 
   // 🔹 Health check
   const checkBackendHealth = async () => {
@@ -42,8 +75,6 @@ const DeepfakeDetection = () => {
   setIsProcessing(true);
   setResult(null);
 
-  const user_id = "user_123"; // Placeholder user ID, replace with actual user ID logic
-
   try {
     const isHealthy = await checkBackendHealth();
     if (!isHealthy) throw new Error("Backend server unreachable");
@@ -59,7 +90,6 @@ const DeepfakeDetection = () => {
     const fileType = file.type.startsWith("video") ? "video" : "image";
     const contentHash = `${fileType}_${Date.now()}`;
     formData.append("content_hash", contentHash);
-    formData.append("user_id", user_id);
     formData.append("type", fileType);
     formData.append("has_text", hasText ? "true" : "false");
 
