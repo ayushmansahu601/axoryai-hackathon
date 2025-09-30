@@ -24,34 +24,7 @@ const DeepfakeDetection = () => {
   const [hasText, setHasText] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-useEffect(() => {
-  const fetchJwt = async () => {
-    try {
-      const user_id = "user_123"; 
 
-      const response = await fetch(`${API_CONFIG.BACKEND_URL}/generate-jwt`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id }),
-      });
-
-      if (!response.ok) throw new Error("Failed to generate JWT");
-
-      const jwt_data = await response.json();
-
-      setToken(jwt_data.jwt); // ✅ update state
-    } catch (err) {
-      console.error("JWT fetch error:", err);
-      toast({
-        title: "Authentication Failed",
-        description: "Unable to fetch access token.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  fetchJwt();
-}, []);
 
   // 🔹 Health check
   const checkBackendHealth = async () => {
